@@ -78,7 +78,7 @@ for photo_folder in photos_folders:
     for photo in find_media(photo_folder):
         photo_name = os.path.basename(photo)
         #print(photo_name)
-        photos[photo_name] = {"path" : photo}
+        photos[photo_name] = {"path" : photo, "album" : "__No_album__"}
         
 
 found = 0
@@ -100,20 +100,35 @@ for album_folder in albums_folders:
                     #print("Una foto indicata nell'album non è stata trovata")
                     not_found += 1
                 else:
+                    photos[photo_name]["album"] = album_name
                     albums[album_name].append(photos[photo_name]["path"])
                     #print(photos[photo_name]["path"] + " " + album_name)
                     #photos[photo_name]["album"] = album_name
                     found += 1
 
+photos_with_no_album = []
+for photo in photos.values():
+    if photo["album"] == "__No_album__":
+        photos_with_no_album.append(photo["path"])
 
-#print(albums)
+albums["__No_album__"] = photos_with_no_album
+
+
+count = 0
+for albums_list in albums.values():
+    count += len(albums_list)
+print(count)
+
 print(len(albums))
 for album_photos in albums.values():
     print(len(album_photos), end = " ")
 
 print("")
+count = 0
 for album_title in albums:
     print(album_title)
+    count += len(albums[album_title])
+
     for photo in albums[album_title]:
         print(photo)
 
